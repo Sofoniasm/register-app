@@ -1,9 +1,10 @@
 pipeline {
     agent { label 'Jenkins-Agent' }
     tools {
-        jdk 'Java17'
-        maven 'Maven3'	    
-    } 
+        // Update these with the names configured in Jenkins for Java and Maven
+        jdk 'Name-Configured-in-Jenkins-for-Java17'
+        maven 'Name-Configured-in-Jenkins-for-Maven3'	    
+    }
 
     stages {
         stage("Cleanup Workspace") {
@@ -33,7 +34,7 @@ pipeline {
         stage("SonarQube Analysis") {
             steps {
                 script {
-                    withSonarQubeEnv(credentialsId: 'jenkins-sonarqube-token') {
+                    withSonarQubeEnv(credentialsId: 'Jenkins-Sonarqube-token') {
                         sh "mvn sonar:sonar"
                     }
                 }
