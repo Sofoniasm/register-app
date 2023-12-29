@@ -5,33 +5,40 @@ pipeline {
         maven 'Maven3'	    
     } 
 
-    stages{ 
-        stage("Cleanup Workspace"){
-	    steps {
-		cleanWs()
-		}
-	}
-	stage("Checkout from SCM") {
-	    steps {
-	        git branch: 'main', credentialsId: 'github' , url: 'https://github.com/Sofoniasm/register-app'
-		}
-	}
-	stage("Build Application"){
+    stages {
+        stage("Cleanup Workspace") {
             steps {
-                sh "mvn clean package"
-            }  
-    }
-	stage("Test Application"){
+                cleanWs()
+            }
+        }
+        stage("Checkout from SCM") {
             steps {
-                 sh "mvn test"
-           }
-       }
-	stage("SonarQube Analysis"){
+                git branch: 'main', credentialsId: 'github', url: 'https://github.com/Sofoniasm/register-app'
+            }
+        }
+        stage("Build Application") {
             steps {
-	         script {
-		   withSonarQubeEnv(credentialsId: 'Jenkins-Sonarqube-token') { 
+                script {
+                    sh "mvn clean package"
+                }
+            }
+        }
+        stage("Test Application") {
+            steps {
+                script {
+                    sh "mvn test"
+                }
+            }
+        }
+        stage("SonarQube Analysis") {
+            steps {
+                script {
+                    withSonarQubeEnv(credentialsId: 'Jenkins-Sonarqube-token') {
                         sh "mvn sonar:sonar"
-		        }
-	           }	    
+                    }
+                }
+            }
+        }
     }
 }
+
